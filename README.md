@@ -49,11 +49,10 @@ To open a terminal and use the command to navigate to the location of the FD-Gen
     ```bash
     .\FD-Gen <FD-Gen project name>.fds
     ```
-  or
+      or
 
-    ```bash
-    python FDSdata.py <FD-Gen project name>.fds
-    ```
+        python FDSdata.py <FD-Gen project name>.fds
+    
 
 4. sample the parameter value data.
 
