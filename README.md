@@ -40,7 +40,7 @@ Openpyxl	  3.1.5
 To prepare the FD-Gen input file.
 
 Each data generation project in FD-Gen is controlled by code lines of text-based FD-Gen script embedded within the original FDS case input file. 
-This script employs a four-letter-based naming convention for its namelist code lines to define randomized parameters and values within the FD-Gen input file. This structured approach mirrors the conventions used in FDS and CFAST, ensuring consistency and enabling an easier transition for existing FDS users. For detailed instructions on how to write FD-Gen input files and view examples, please refer to the NIST technical note at https://doi.org/10.6028/NIST.XXX.XXXX.
+This script employs a four-letter-based naming convention for its namelist code lines to define randomized parameters and values within the FD-Gen input file. This structured approach mirrors the conventions used in FDS and CFAST, ensuring consistency and enabling an easier transition for existing FDS users. For detailed instructions on how to write FD-Gen input files and view examples, please refer to the NIST technical note at https://doi.org/10.6028/NIST.TN.2332.
 
 The following folder contains several examples of prepared FD-Gen input files.
 
