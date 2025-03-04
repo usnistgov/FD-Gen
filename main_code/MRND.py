@@ -189,14 +189,7 @@ def GENERATING_SAMPLES(SAMPLE_GENERATOR_INFO):
             if value_type is None:
                 value_type = "APPROX"
                 sample_generator.VALUE_TYPE[GENERATOR_ID] = value_type
-                def get_precision(number):
-                    number_str = str(number)
-                    if '.' in number_str:
-                        return len(number_str.split('.')[1])
-                    else:
-                        return 0
-                precisions = [get_precision(value) for value in [minimum,maximum,constant]]
-                approx_value = float(1 * 10**(-max(precisions)))
+                approx_value = float(0.01)
                 sample_generator.APPROX_VALUE[GENERATOR_ID] = approx_value
                 
             # retrieve parameters

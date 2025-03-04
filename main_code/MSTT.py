@@ -33,9 +33,9 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 fire_burner_W=parameter.FIRE_BURNER_SIZE[1]
                 fire_burner_H=parameter.FIRE_BURNER_SIZE[2]
                 # mesh size
-                mesh_size_x=parameter.MESH_SIZE[0]
-                mesh_size_y=parameter.MESH_SIZE[1]
-                mesh_size_z=parameter.MESH_SIZE[2]
+                mesh_size_x=parameter.MESH_SIZE[0] if parameter.MESH_SIZE[0] is not None else 0.1
+                mesh_size_y=parameter.MESH_SIZE[1] if parameter.MESH_SIZE[1] is not None else 0.1
+                mesh_size_z=parameter.MESH_SIZE[2] if parameter.MESH_SIZE[2] is not None else 0.1
                 # fire source locations
                 fire_source_location_x=parameter.SAMPLES[0]
                 fire_source_location_y=parameter.SAMPLES[1]
@@ -52,7 +52,7 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 ax1 = fig.add_subplot(gs[0, 0])
                 ax1.set_xlim(xL, xH)
                 ax1.set_ylim(zL, zH)
-                ax1.set_title('Front View')
+                ax1.set_title('Front View', fontsize=18)
                 # Draw a grid
                 for i in np.arange(zL, zH + mesh_size_z, mesh_size_z):
                     ax1.axhline(y=i, color='gray', alpha=0.3)
@@ -61,6 +61,8 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 # Set the limits of the plot
                 ax1.set_xticks(np.arange(xL, xH, 1))
                 ax1.set_yticks(np.arange(zL, zH, 1))
+                ax1.set_xticklabels(ax1.get_xticks(), fontsize=15)
+                ax1.set_yticklabels(ax1.get_yticks(), fontsize=15)
                 ax1.grid(True, which='both')
                 # draw the fire source locations
                 for index in range(0, number_of_samples, skip_case):
@@ -82,7 +84,7 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 ax2 = fig.add_subplot(gs[0, 1])
                 ax2.set_xlim(yL, yH)
                 ax2.set_ylim(zL, zH)
-                ax2.set_title('Side View')
+                ax2.set_title('Side View', fontsize=18)
                 # Draw a grid
                 for i in np.arange(zL, zH + mesh_size_z, mesh_size_z):
                     ax2.axhline(y=i, color='gray', alpha=0.3)
@@ -91,6 +93,8 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 # Set the limits of the plot
                 ax2.set_xticks(np.arange(yL, yH, 1))
                 ax2.set_yticks(np.arange(zL, zH, 1))
+                ax2.set_xticklabels(ax2.get_xticks(), fontsize=15)
+                ax2.set_yticklabels(ax2.get_yticks(), fontsize=15)
                 ax2.grid(True, which='both')
                 # draw the fire source locations
                 for index in range(0, number_of_samples, skip_case):
@@ -112,7 +116,7 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 ax3 = fig.add_subplot(gs[0, 2])
                 ax3.set_xlim(xL, xH)
                 ax3.set_ylim(yL, yH)
-                ax3.set_title('Top View')
+                ax3.set_title('Top View', fontsize=18)
                 # Draw a grid
                 for i in np.arange(yL, yH + mesh_size_y, mesh_size_y):
                     ax3.axhline(y=i, color='gray', alpha=0.3)
@@ -121,6 +125,8 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 # Set the limits of the plot
                 ax3.set_xticks(np.arange(xL, xH, 1))
                 ax3.set_yticks(np.arange(yL, yH, 1))
+                ax3.set_xticklabels(ax3.get_xticks(), fontsize=15)
+                ax3.set_yticklabels(ax3.get_yticks(), fontsize=15)
                 ax3.grid(True, which='both')
                 # draw the fire source locations
                 for index in range(0, number_of_samples, skip_case):
@@ -166,8 +172,14 @@ def PLOT_HRR_CURVES(HRC_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 # set the figure
                 fig, ax = plt.subplots(figsize=(20, 10))
                 for index in range(0, number_of_samples, skip_case):
-                    ax.plot(time_slice_samples[index], hrr_samples[index], alpha=0.3)
-                
+                    ax.plot(time_slice_samples[index], hrr_samples[index], alpha=0.7)
+                    
+                ax.set_xlabel('Time', fontsize=18)
+                ax.set_xticks(ax.get_xticks()) 
+                ax.set_xticklabels([f"{int(tick)}" for tick in ax.get_xticks()], fontsize=15) 
+                ax.set_ylabel('HRR', fontsize=18)
+                ax.set_yticks(ax.get_yticks()) 
+                ax.set_yticklabels([f"{int(tick)}" for tick in ax.get_yticks()], fontsize=15) 
                 plt.savefig(id+".jpg", format='jpg')
 
             
@@ -200,15 +212,21 @@ def PLOT_GENERATOR_SAMPLINGS(PSD_ID, SAMPLE_GENERATOR_OUTPUTS, SKIP_CASE=1):
                     fig.set_figheight(10)
 
                     ax.hist(data_samples, bins=10, rwidth=0.8, alpha=0.5)
-                    ax.set_ylabel('counts', color='blue')
+                    ax.set_ylabel('counts', color='blue', fontsize=18)
+                    ax.set_yticks(ax.get_yticks()) 
+                    ax.set_yticklabels([f"{round(tick,2)}" for tick in ax.get_yticks()], fontsize=15) 
                     ax1=ax.twinx()
                     sorted_data = np.sort(data_samples)
                     ax1.plot(sorted_data, np.arange(1, len(data_samples) + 1) / len(data_samples), color='red')
-                    ax.set_xlabel('data values')
-                    ax1.set_ylabel('cumulative percent', color='red')
+                    ax.set_xlabel('data values', fontsize=18)
+                    ax.set_xticks(ax.get_xticks())
+                    ax.set_xticklabels([f"{round(tick,2)}" for tick in ax.get_xticks()], fontsize=15) 
+                    ax1.set_ylabel('cumulative percent', color='red', fontsize=18)
+                    ax1.set_yticks(ax1.get_yticks()) 
+                    ax1.set_yticklabels([f"{round(tick,2)}" for tick in ax1.get_yticks()], fontsize=15) 
                     title_line1 = 'Random data samples (N={})'.format(len(original_data_samples))
-                    title_line2 = 'ID = {}'.format(id)
-                    ax.set_title(f'{title_line1}\n{title_line2}')
+                    title_line2 = 'ID = {}'.format(plot_id)
+                    ax.set_title(f'{title_line1}\n{title_line2}', fontsize=18)
                     
                     plt.savefig(plot_id+".jpg", format='jpg')
 

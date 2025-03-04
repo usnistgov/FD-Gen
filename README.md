@@ -21,11 +21,17 @@ The workflow of FD-Gen is shown below. It consists of 4 main steps.
 
 ## installation instructions
 This project provides a GitHub repository for those interested in obtaining and testing FD-Gen. The current location of the repository is https://github.com/usnistgov/FD-Gen. The repository contains both the [**source code**](main_code) and the executable file [**FD-Gen.exe**](FD-Gen.exe). The FD-Gen executable has been tested and confirmed to work effectively on Windows 10 and 11-based personal computers with FDS version 6.9.1. For users utilizing the Python source code, the environment requirements for the dependencies are listed below. Ensure that these dependencies are installed in your Python environment before running FD-Gen:
+
 Python	    3.11 or higher
+
 Numpy	      1.26.4
+
 Pandas	    2.2.3
+
 Scipy	      1.14.1
+
 Matplotlib	3.9.2
+
 Openpyxl	  3.1.5
 
 
@@ -49,11 +55,10 @@ To open a terminal and use the command to navigate to the location of the FD-Gen
     ```bash
     .\FD-Gen <FD-Gen project name>.fds
     ```
-  or
+      or
 
-    ```bash
-    python FDSdata.py <FD-Gen project name>.fds
-    ```
+        python FDSdata.py <FD-Gen project name>.fds
+    
 
 4. sample the parameter value data.
 
@@ -72,7 +77,7 @@ In addition to the spreadsheet containing the sampled parameter value informatio
 ## Example
 
 ### Start
-[**commercial building fire case**](example\example_commercial.fds)
+[**commercial building fire case**](example/example_commercial.fds)
 
 1. download **FD-Gen.exe** and the example input file **example_commercial.fds**
 
