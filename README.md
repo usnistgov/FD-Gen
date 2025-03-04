@@ -124,10 +124,10 @@ The SEEDS_FOLDER contains the seeds used for the project, ensuring reproducibili
 **Figure 5.** example of SEEDS_FOLDER.
 
 ## Documentation
-For detailed instructions and example on using FD-Gen, please refer to the NIST technical note at https://doi.org/10.6028/NIST.XXX.XXXX.
+For detailed instructions and example on using FD-Gen, please refer to the NIST technical note at [https://doi.org/10.6028/NIST.TN.2332].
 
 ## Citation
-Author (Year) Title. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Series (Series Abbreviation) Publication ID. https://doi.org/10.6028/NIST.XXX.XXXX 
+H. Fang, W. C. Tam, (2025) Fire Data Generator (FD-Gen) v1.0.0. (National Institute of Standards and Technology, Gaithersburg, MD), NIST TN 2332. https://doi.org/10.6028/NIST.TN.2332  
 
 
 
