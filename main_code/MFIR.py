@@ -396,7 +396,7 @@ def GENERATING_MAX_HRR_SAMPLES(ID, GENERATOR_ID, PARAMETER_PRE_OUTPUTS_INFO, PAR
 # define the class of parameters BASELINE_HRR
 class HRR_CURVE_DICT:
     def __init__(self, HRR_CURVE_INFO):
-        if len(HRR_CURVE_INFO) == 14:
+        if len(HRR_CURVE_INFO) == 15:
             baseline_hrr_info=HRR_CURVE_INFO
             self.ID=baseline_hrr_info[0]
             self.FIRE_TIME_DURATION_GENERATOR_ID=baseline_hrr_info[1]
@@ -412,11 +412,12 @@ class HRR_CURVE_DICT:
             self.TIME_SLICE_SAMPLES=baseline_hrr_info[11]
             self.HRR_SAMPLES=baseline_hrr_info[12]
             self.PRODUCT=baseline_hrr_info[13]
+            self.FIRE_BURNER_AREA=baseline_hrr_info[14]
         else:
-            raise ValueError(f"HRR_CURVE_INFO for ID '{self.ID}' must contain at least 13 elements.")
+            raise ValueError(f"HRR_CURVE_INFO for ID '{self.ID}' must contain at least 14 elements.")
     
     def to_list(self):
-        return [self.ID, self.FIRE_TIME_DURATION_GENERATOR_ID, self.MAX_HRR_GENERATOR_ID, self.FIRE_PATTERN, self.FYI, self.TIME_FREQUENCY, self.START_TIME, self.END_TIME, self.HRR_FLUCTUATION, self.HRR_FLUCTUATION_RATE, self.NUMBER_OF_SAMPLES, self.TIME_SLICE_SAMPLES, self.HRR_SAMPLES, self.PRODUCT]
+        return [self.ID, self.FIRE_TIME_DURATION_GENERATOR_ID, self.MAX_HRR_GENERATOR_ID, self.FIRE_PATTERN, self.FYI, self.TIME_FREQUENCY, self.START_TIME, self.END_TIME, self.HRR_FLUCTUATION, self.HRR_FLUCTUATION_RATE, self.NUMBER_OF_SAMPLES, self.TIME_SLICE_SAMPLES, self.HRR_SAMPLES, self.PRODUCT, self.FIRE_BURNER_AREA]
     
     def to_dict(self):
         return  self.__dict__
@@ -433,6 +434,7 @@ class HRR_CURVE_DICT:
                     f"Time End: {self.END_TIME},\n"
                     f"HRR Fluctuation: {self.HRR_FLUCTUATION}, \n"
                     f"HRR Fluctuation Rate: {self.HRR_FLUCTUATION_RATE}, \n"
+                    f"Fire burner area: {self.FIRE_BURNER_AREA}, \n"
                     f"Number of Samples: {self.NUMBER_OF_SAMPLES}, \n"
                     f"Time Slice Samples: {self.TIME_SLICE_SAMPLES}, \n"
                     f"Baseline HRR Samples: {self.HRR_SAMPLES} "
@@ -441,7 +443,7 @@ class HRR_CURVE_DICT:
     
 
 # Generating HRR baseline samples 
-def GENERATING_HRR_CURVE(ID, FIRE_TIME_DURATION_GENERATOR_ID, MAX_HRR_GENERATOR_ID, PARAMETER_OUTPUTS, FIRE_PATTERN=[1,2,0,2], FYI=None, START_TIME=0,  END_TIME=1800, TIME_FREQUENCY=1, HRR_FLUCTUATION=False, HRR_FLUCTUATION_RATE=0, TIME_SLICE_SAMPLES=None, HRR_SAMPLES=None, PRODUCT=False):
+def GENERATING_HRR_CURVE(ID, FIRE_TIME_DURATION_GENERATOR_ID, MAX_HRR_GENERATOR_ID, PARAMETER_OUTPUTS, FIRE_PATTERN=[1,2,0,2], FYI=None, START_TIME=0,  END_TIME=1800, TIME_FREQUENCY=1, HRR_FLUCTUATION=False, HRR_FLUCTUATION_RATE=0, TIME_SLICE_SAMPLES=None, HRR_SAMPLES=None, PRODUCT=False, FIRE_BURNER_AREA=1):
     
     # transfer the sample format
     NUMBER_OF_SAMPLES=GET_VALUE("NUMBER_OF_CASES")
@@ -473,7 +475,7 @@ def GENERATING_HRR_CURVE(ID, FIRE_TIME_DURATION_GENERATOR_ID, MAX_HRR_GENERATOR_
         raise ValueError(f"FIRE_PATTERN for GHRC ID = '{id}' MUST have 4 elements.")
     
     # save to dictionary 
-    HRR_curve_info=[id, FTD_generator_id, MHR_generator_id, FIRE_PATTERN, FYI, TIME_FREQUENCY, START_TIME, END_TIME, HRR_FLUCTUATION, HRR_FLUCTUATION_RATE, NUMBER_OF_SAMPLES, TIME_SLICE_SAMPLES, HRR_SAMPLES, PRODUCT]
+    HRR_curve_info=[id, FTD_generator_id, MHR_generator_id, FIRE_PATTERN, FYI, TIME_FREQUENCY, START_TIME, END_TIME, HRR_FLUCTUATION, HRR_FLUCTUATION_RATE, NUMBER_OF_SAMPLES, TIME_SLICE_SAMPLES, HRR_SAMPLES, PRODUCT, FIRE_BURNER_AREA]
     HRR_curve = HRR_CURVE_DICT(HRR_curve_info)
 
     # extract information
@@ -486,6 +488,7 @@ def GENERATING_HRR_CURVE(ID, FIRE_TIME_DURATION_GENERATOR_ID, MAX_HRR_GENERATOR_
     number_of_samples=HRR_curve.NUMBER_OF_SAMPLES
     time_slice_samples=HRR_curve.TIME_SLICE_SAMPLES
     hrr_curve_samples=HRR_curve.HRR_SAMPLES
+    fire_burner_area=HRR_curve.FIRE_BURNER_AREA
     
     FTD_generators=[]
     MHR_generators=[]
@@ -587,7 +590,7 @@ def GENERATING_HRR_CURVE(ID, FIRE_TIME_DURATION_GENERATOR_ID, MAX_HRR_GENERATOR_
                 # incipient stage
                 incipient_time_duration=samples_fire_time_duration[0][sample]
                 incipient_time_num=round(incipient_time_duration/fire_frequency)
-                incipient_max_hrr=sample_max_hrr[0][sample]
+                incipient_max_hrr=sample_max_hrr[0][sample]/fire_burner_area
                 if incipient_time_duration==0:
                     incipient_slope=0
                 else:
@@ -597,7 +600,7 @@ def GENERATING_HRR_CURVE(ID, FIRE_TIME_DURATION_GENERATOR_ID, MAX_HRR_GENERATOR_
                 time_accum=time_accum+incipient_time_duration
                     
                 # fire growth stage
-                peak_max_hrr=sample_max_hrr[1][sample]
+                peak_max_hrr=sample_max_hrr[1][sample]/fire_burner_area
                 if samples_fire_time_duration[1][sample]!=0:
                     fire_growth_time_duration=samples_fire_time_duration[1][sample]
                     fire_growth_time_num=round(fire_growth_time_duration/fire_frequency)
@@ -618,14 +621,14 @@ def GENERATING_HRR_CURVE(ID, FIRE_TIME_DURATION_GENERATOR_ID, MAX_HRR_GENERATOR_
                 # peak stage
                 peak_time_duration=samples_fire_time_duration[3][sample]
                 peak_time_num=round(peak_time_duration/fire_frequency)
-                peak_max_hrr=sample_max_hrr[1][sample]
+                peak_max_hrr=sample_max_hrr[1][sample]/fire_burner_area
                 peak_time_slices=np.linspace(time_accum+1, time_accum+peak_time_duration, peak_time_num)
                 peak_hrr_samples= [peak_max_hrr]*peak_time_num
                 time_accum=time_accum+peak_time_duration        
                 
                 # decay stage
-                peak_max_hrr=sample_max_hrr[1][sample]
-                decay_min_hrr=sample_max_hrr[2][sample]
+                peak_max_hrr=sample_max_hrr[1][sample]/fire_burner_area
+                decay_min_hrr=sample_max_hrr[2][sample]/fire_burner_area
                 if samples_fire_time_duration[4][sample]!=0:
                     decay_time_duration=samples_fire_time_duration[4][sample]
                     decay_time_num=round(decay_time_duration/fire_frequency)

@@ -167,12 +167,14 @@ def PLOT_HRR_CURVES(HRC_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 # hrr curve
                 time_slice_samples=parameter.TIME_SLICE_SAMPLES
                 hrr_samples=parameter.HRR_SAMPLES
+                fire_burner_area=parameter.FIRE_BURNER_AREA
+                
                 number_of_samples=len(time_slice_samples)
                 
                 # set the figure
                 fig, ax = plt.subplots(figsize=(20, 10))
                 for index in range(0, number_of_samples, skip_case):
-                    ax.plot(time_slice_samples[index], hrr_samples[index], alpha=0.7)
+                    ax.plot(time_slice_samples[index], hrr_samples[index]*fire_burner_area, alpha=0.7)
                     
                 ax.set_xlabel('Time', fontsize=18)
                 ax.set_xticks(ax.get_xticks()) 
