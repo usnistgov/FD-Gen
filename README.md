@@ -2,7 +2,7 @@
 
 **Release Name**: FD-Gen v1.0.0
 
-**Release Date**: [Dec 9, 2024]
+**Release Date**: [Mar 6, 2025]
 
 **Version**: 1.0.0
 
