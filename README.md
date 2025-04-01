@@ -12,7 +12,49 @@
 ## Getting started
 **Fire data generator (FD-Gen)** is a Python-based automated tool designed to streamline the creation of multiple FDS case input files. 
 
-The tool is developed using the Python programming language. it generates random values for key fire parameters and integrates them directly into FDS code lines, enabling users to efficiently produce a large volume of FDS case files within specified parameter ranges. The current version of FD-Gen supports the randomization of various fire parameters, including fire source locations, vent locations, door or window opening sequences, obstruction sizes, fire heat release rate (HRR) curves, and other related parameters.
+The tool is developed using the Python programming language. it generates random values for key fire parameters and integrates them directly into FDS code lines, enabling users to efficiently produce a large volume of FDS case files within specified parameter ranges. The current version of FD-Gen supports the randomization of various fire parameters, including fire source locations, vent locations, door or window opening sequences, obstruction sizes, fire heat release rate (HRR) curves, and other related parameters. The program documentation has been published as a NIST Technical Note and is available at https://doi.org/10.6028/NIST.TN.2332. A comprehensive user guide and examples demonstrating the program’s usage are provided.
+
+The package consists of the following files:
+
+[**executable FD-Gen**](FD-Gen.exe)
+
+[**Python souce code**](main_code)
+
+[**Test case for namelist main and sample generator**](/test_case/Test_script_MAIN_MRND.txt)
+(see documentation Sections 3.1 and 3.2)
+
+[**Test case for fire source location (FSL)**](/test_case/Test_script_FSL.txt)
+(see documentation Section 3.3)
+
+[**Test case for vent position (VTP)**](/test_case/test_script_VTP.txt)
+(see documentation Section 3.4)
+
+[**Test case for door or window open time (DWT)**](/test_case/Test_script_DWT.txt)
+(see documentation Section 3.5)
+
+[**Test case for random obstruction (RXB)**](/test_case/test_script_RXB.txt)
+(see documentation Section 3.6)
+
+[**Test case for other parameters (OTH)**](/test_case/test_script_OTH.txt)
+(see documentation Section 3.7)
+
+[**Test case for HRR curve (HRC)**](/test_case/Test_script_HRC.txt)
+(see documentation Section 3.8)
+
+[**FD-Gen input file for a commercial building fire case**](/example/example_commercial.fds)
+(see documentation Section 5.1)
+
+[**FD-Gen input file for a CSTB tunnel fire case**](/example/example_CSTB_Tunnel_Test_2.fds)
+(see documentation Section 5.2)
+
+[**FD-Gen input file for a single-story residential room fire case**](/example/example_Single_Story_Gas_1.fds )
+(see documentation Section 5.3)
+
+[**FD-Gen input file for a smoke alarm testing fire case**](/example/example_NIST_Smoke_Alarms_SDC02.fds)
+
+[**FD-Gen input file for a wildland fire case**](/example/example_wind_test2.fds)
+
+
 
 The workflow of FD-Gen is shown below. It consists of 4 main steps.
 
@@ -36,6 +78,10 @@ Openpyxl	  3.1.5
 
 
 ## Usage approach 
+###  Step 1: write the FDS input file.
+A FDS input file need to be prepared. This file should include key components such as the basic building geometry, fire scenario definition, mesh configuration, surface and material properties, as well as device placement and monitoring information. These elements are crucial for accurately simulating fire dynamics and ensuring the proper functionality of the simulation. The setup process for this input file aligns with the standard procedure used in any fire simulation case in FDS. It is advisable to test the file in the FDS program beforehand to ensure correct configurations before proceeding with subsequent FD-Gen steps. Detailed instructions on how to download the executables, manuals, source-code and related utilities of FDS can be found on the official website of NIST FDS project at: https://pages.nist.gov/fds-smv/.
+
+
 ### Step 2: write the FD-Gen input file.
 To prepare the FD-Gen input file.
 
@@ -127,7 +173,9 @@ The SEEDS_FOLDER contains the seeds used for the project, ensuring reproducibili
 For detailed instructions and example on using FD-Gen, please refer to the NIST technical note at [https://doi.org/10.6028/NIST.TN.2332].
 
 ## Citation
-H. Fang, W. C. Tam, (2025) Fire Data Generator (FD-Gen) v1.0.0. (National Institute of Standards and Technology, Gaithersburg, MD), NIST TN 2332. https://doi.org/10.6028/NIST.TN.2332  
+1. Fang, Hongqiang, Tam, Wai Cheong (2025), Fire Data Generator (FD-Gen) , National Institute of Standards and Technology, https://doi.org/10.18434/mds2-3688 (Accessed 2025-03-31)
+
+2. H. Fang, W. C. Tam, (2025) Fire Data Generator (FD-Gen) v1.0.0. (National Institute of Standards and Technology, Gaithersburg, MD), NIST TN 2332. https://doi.org/10.6028/NIST.TN.2332  
 
 
 
@@ -137,5 +185,6 @@ H. Fang, W. C. Tam, (2025) Fire Data Generator (FD-Gen) v1.0.0. (National Instit
 by Hongqiang Fang and Andy Tam, principally:
 
 - Hongqiang (Rory) Fang, @hqfang3
+- Andy Tam
 
 Please reach out with questions and feedbacks to Hongqiang (Rory) Fang <hongqiang.fang@nist.gov> and Andy Tam <waicheong.tam@nist.gov>.
