@@ -18,18 +18,18 @@ The package consists of the following files:
 
 [**executable FD-Gen**](FD-Gen.exe)
 
-[**Python souce code**](main_code)
+[**Python souce code**](main_code) 
 
-[**Test case for namelist main and sample generator**](/test_case/Test_script_MAIN_MRND.txt)
+[**Test case for namelist main and sample generator**](/test_case/test_script_MAIN_MRND.txt)
 (see documentation Sections 3.1 and 3.2)
 
-[**Test case for fire source location (FSL)**](/test_case/Test_script_FSL.txt)
+[**Test case for fire source location (FSL)**](/test_case/test_script_FSL.txt)
 (see documentation Section 3.3)
 
 [**Test case for vent position (VTP)**](/test_case/test_script_VTP.txt)
 (see documentation Section 3.4)
 
-[**Test case for door or window open time (DWT)**](/test_case/Test_script_DWT.txt)
+[**Test case for door or window open time (DWT)**](/test_case/test_script_DWT.txt)
 (see documentation Section 3.5)
 
 [**Test case for random obstruction (RXB)**](/test_case/test_script_RXB.txt)
@@ -38,7 +38,7 @@ The package consists of the following files:
 [**Test case for other parameters (OTH)**](/test_case/test_script_OTH.txt)
 (see documentation Section 3.7)
 
-[**Test case for HRR curve (HRC)**](/test_case/Test_script_HRC.txt)
+[**Test case for HRR curve (HRC)**](/test_case/test_script_HRC.txt)
 (see documentation Section 3.8)
 
 [**FD-Gen input file for a commercial building fire case**](/example/example_commercial.fds)
