@@ -10,9 +10,9 @@
 
 
 ## Getting started
-**Fire data generator (FD-Gen)** is a Python-based automated tool designed to streamline the creation of multiple FDS case input files. 
+**Fire data generator (FD-Gen)** is a Python-based automated tool designed to streamline the creation of multiple Fire Dynamics Simulator (FDS) case input files. 
 
-The tool is developed using the Python programming language. it generates random values for key fire parameters and integrates them directly into FDS code lines, enabling users to efficiently produce a large volume of FDS case files within specified parameter ranges. The current version of FD-Gen supports the randomization of various fire parameters, including fire source locations, vent locations, door or window opening sequences, obstruction sizes, fire heat release rate (HRR) curves, and other related parameters. The program documentation has been published as a NIST Technical Note and is available at https://doi.org/10.6028/NIST.TN.2332. A comprehensive user guide and examples demonstrating the program’s usage are provided.
+The tool is developed using the Python programming language. It generates random values for key fire parameters and integrates them directly into FDS code lines, enabling users to efficiently produce a large volume of FDS case files within specified parameter ranges. The current version of FD-Gen supports the randomization of various fire parameters, including fire source locations, vent locations, door or window opening sequences, obstruction sizes, fire heat release rate (HRR) curves, and other related parameters. The program documentation has been published as a NIST Technical Note and is available at https://doi.org/10.6028/NIST.TN.2332. A comprehensive user guide and examples demonstrating the program’s usage are provided.
 
 The package consists of the following files:
 
@@ -79,14 +79,14 @@ Openpyxl	  3.1.5
 
 ## Usage approach 
 ###  Step 1: write the FDS input file.
-A FDS input file need to be prepared. This file should include key components such as the basic building geometry, fire scenario definition, mesh configuration, surface and material properties, as well as device placement and monitoring information. These elements are crucial for accurately simulating fire dynamics and ensuring the proper functionality of the simulation. The setup process for this input file aligns with the standard procedure used in any fire simulation case in FDS. It is advisable to test the file in the FDS program beforehand to ensure correct configurations before proceeding with subsequent FD-Gen steps. Detailed instructions on how to download the executables, manuals, source-code and related utilities of FDS can be found on the official website of NIST FDS project at: https://pages.nist.gov/fds-smv/.
+A FDS input file needs to be prepared. This file should include key components such as the basic building geometry, fire scenario definition, mesh configuration, surface and material properties, as well as device placement and monitoring information. These elements are crucial for accurately simulating fire dynamics and ensuring the proper functionality of the simulation. The setup process for this input file aligns with the standard procedure used in any fire simulation case in FDS. It is advisable to test the file in the FDS program beforehand to ensure correct configurations before proceeding with subsequent FD-Gen steps. Detailed instructions on how to download the executables, manuals, source-code and related utilities of FDS can be found on the official website of NIST FDS project at: https://pages.nist.gov/fds-smv/.
 
 
 ### Step 2: write the FD-Gen input file.
 To prepare the FD-Gen input file.
 
 Each data generation project in FD-Gen is controlled by code lines of text-based FD-Gen script embedded within the original FDS case input file. 
-This script employs a four-letter-based naming convention for its namelist code lines to define randomized parameters and values within the FD-Gen input file. This structured approach mirrors the conventions used in FDS and CFAST, ensuring consistency and enabling an easier transition for existing FDS users. For detailed instructions on how to write FD-Gen input files and view examples, please refer to the NIST technical note at https://doi.org/10.6028/NIST.TN.2332.
+This script employs a four-letter-based naming convention for its namelist code lines to define randomized parameters and values within the FD-Gen input file. This structured approach mirrors the conventions used in FDS and Consolidated Fire and Smoke Transport (CFAST), ensuring consistency and enabling an easier transition for existing FDS users. For detailed instructions on how to write FD-Gen input files and view examples, please refer to the NIST technical note at https://doi.org/10.6028/NIST.TN.2332.
 
 The following folder contains several examples of prepared FD-Gen input files.
 
@@ -108,7 +108,7 @@ To open a terminal and use the command to navigate to the location of the FD-Gen
 
 4. sample the parameter value data.
 
-Once the FD-Gen input file is executed, the program reads the FD-Gen code lines and performs basic code checking and parameter sampling. users can review the sampled parameter values in the **PARAMETER_FILE_FOLDER** located within the project folder. If the sampling aligns with the design, you can proceed with the program in the terminal. Otherwise, you'll need to return to the FD-Gen input file to modify the script guiding the parameter sampling.
+Once the FD-Gen input file is executed, the program reads the FD-Gen code lines and performs basic code checking and parameter sampling. Users can review the sampled parameter values in the **PARAMETER_FILE_FOLDER** located within the project folder. If the sampling aligns with the design, you can proceed with the program in the terminal. Otherwise, you'll need to return to the FD-Gen input file to modify the script guiding the parameter sampling.
 
 
 5. wrap the FDS input file.
