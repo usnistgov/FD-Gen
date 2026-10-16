@@ -64,17 +64,20 @@ The workflow of FD-Gen is shown below. It consists of 4 main steps.
 ## installation instructions
 This project provides a GitHub repository for those interested in obtaining and testing FD-Gen. The current location of the repository is https://github.com/usnistgov/FD-Gen. The repository contains both the [**source code**](main_code) and the executable file [**FD-Gen.exe**](FD-Gen.exe). The FD-Gen executable has been tested and confirmed to work effectively on Windows 10 and 11-based personal computers with FDS version 6.9.1. For users utilizing the Python source code, the environment requirements for the dependencies are listed below. Ensure that these dependencies are installed in your Python environment before running FD-Gen:
 
-Python	    3.11 or higher
+| Package    | Version              |
+|------------|----------------------|
+| Python     | 3.11 or higher       |
+| Numpy      | 1.26.4 or higher, <3 |
+| Pandas     | 2.2.3 or higher, <3  |
+| Scipy      | 1.14.1 or higher, <2 |
+| Matplotlib | 3.9.2 or higher, <4  |
+| Openpyxl   | 3.1.5 or higher, <4  |
 
-Numpy	      1.26.4
+NumPy 2.x is supported. The dependencies can be installed with:
 
-Pandas	    2.2.3
-
-Scipy	      1.14.1
-
-Matplotlib	3.9.2
-
-Openpyxl	  3.1.5
+```bash
+pip install -r requirements.txt
+```
 
 
 ## Usage approach 
