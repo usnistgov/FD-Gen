@@ -48,6 +48,9 @@ def collect_outputs(project_dir):
         rows = ['\t'.join('' if cell is None else str(cell) for cell in row) for row in sheet.iter_rows(values_only=True)]
         outputs['parameter_outputs.xlsx/' + sheet.title] = '\n'.join(rows)
     workbook.close()
+    hrr_curves = project_dir / 'PARAMETER_FILE_FOLDER' / 'hrr_curves.csv'
+    if hrr_curves.exists():
+        outputs['hrr_curves.csv'] = hrr_curves.read_text(encoding='utf-8')
     return outputs
 
 

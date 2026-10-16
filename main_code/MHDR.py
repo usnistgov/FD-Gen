@@ -108,6 +108,7 @@ def PARAMETER_FILE(PARAMETERS_OUTPUT, PARAMETER_SAMPLE_GENERATOR_OUTPUTS):
         file_parameter_brief=QUTP.PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name)
         file_generator_info=QUTP.PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path, generator_info_name)
     file_parameter_spreadsheet=QUTP.PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, parameter_spreadsheet_name)
+    QUTP.PRINT_HRR_CURVES_CSV(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, 'hrr_curves.csv')
     
     print(f"*****PARAMETER_FILE file created successfully.")
     

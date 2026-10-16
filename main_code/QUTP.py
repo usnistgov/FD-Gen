@@ -1,5 +1,6 @@
 # import library
 import contextlib
+import csv
 import os
 import numpy as np
 import pandas as pd
@@ -334,19 +335,8 @@ def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_fil
             spreadsheet_data.update({name1:MHR_peak})
             spreadsheet_data.update({name2:MHR_decay})
     
-    # HRC spreadsheet
-    if parameter_outputs['HRC'] != []:
-        for number, data_dic in enumerate(parameter_outputs['HRC']):
-            name0='<HRC> ID - ' + data_dic.ID + ' .Fire time duration'
-            HRC_fire_time_duration=[]
-            name1='<HRC> ID - ' + data_dic.ID + ' .HRR samples'
-            HRC_hrr_samples=[]
-            for case_num in range(number_of_case):
-                HRC_fire_time_duration.append(data_dic.TIME_SLICE_SAMPLES[case_num])
-                HRC_hrr_samples.append(data_dic.HRR_SAMPLES[case_num])
-            spreadsheet_data.update({name0:HRC_fire_time_duration})
-            spreadsheet_data.update({name1:HRC_hrr_samples})
-            
+    # HRC curves are written to hrr_curves.csv (see PRINT_HRR_CURVES_CSV), too long for spreadsheet cells.
+
     # Create a DataFrame from the data
     spreadsheet_data = {name: [format_cell(value) for value in column] for name, column in spreadsheet_data.items()}
     df = pd.DataFrame(spreadsheet_data)
@@ -361,3 +351,20 @@ def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_fil
     
     
     
+
+"Part 4: print HRR curves."
+# one row per time step: HRC_ID, Case, Time (s), HRR (kW); no file when no HRR curve is generated.
+def PRINT_HRR_CURVES_CSV(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, hrr_curves_name):
+    parameter_outputs=PARAMETERS_OUTPUT
+    if parameter_outputs['HRC'] == []:
+        return
+    
+    with open(os.path.join(parameter_file_path, hrr_curves_name), 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['HRC_ID', 'Case', 'Time (s)', 'HRR (kW)'])
+        for data_dic in parameter_outputs['HRC']:
+            for case_num in range(number_of_case):
+                for time, hrr in zip(data_dic.TIME_SLICE_SAMPLES[case_num], data_dic.HRR_SAMPLES[case_num]):
+                    writer.writerow([data_dic.ID, case_num, PS.format_value(time), PS.format_value(hrr)])
+    
+    return

@@ -159,7 +159,7 @@ The OUTPUT_FOLDER contains visualizations of the sampled data, including plots o
 **Figure 3.** example of OUTPUT_FOLDER.
 
 **PARAMETER_FILE_FOLDER**
-The PARAMETER_FILE_FOLDER contains a spreadsheet with the sampled parameter values for each case, along with a text file providing a summary of the parameter values. 
+The PARAMETER_FILE_FOLDER contains a spreadsheet with the sampled parameter values for each case, along with a text file providing a summary of the parameter values. When HRR curves are generated, the full curve of every case is saved in **hrr_curves.csv**, one row per time step (columns: HRC_ID, Case, Time (s), HRR (kW)). 
 
 ![Figure 4. example of PARAMETER_FILE_FOLDER.](images/Picture4.png)
 
