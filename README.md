@@ -107,6 +107,16 @@ To open a terminal and use the command to navigate to the location of the FD-Gen
       or
 
         python FDSdata.py <FD-Gen project name>.fds
+
+    Optional flags (v1.1.0 and later):
+
+    | Flag | Effect |
+    |------|--------|
+    | `-y`, `--yes` | answer Y to all prompts, so the program runs every step without asking (useful for batch or cluster runs) |
+    | `--sample-only` | stop after the sampling step, so you can review the sampled values before any FDS case files are written |
+    | `-h`, `--help` | show the usage and all options |
+
+    For example: `python FDSdata.py example_commercial.fds --yes`
     
 
 4. sample the parameter value data.

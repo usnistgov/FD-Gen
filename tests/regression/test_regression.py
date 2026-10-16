@@ -31,8 +31,8 @@ ABS_TOL = 1e-12
 
 def run_fdgen(input_file, work_dir):
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', MPLBACKEND='Agg')
-    result = subprocess.run([sys.executable, str(FDSDATA), str(input_file)], cwd=work_dir, env=env,
-                            input='y\ny\n', capture_output=True, text=True, timeout=900)
+    result = subprocess.run([sys.executable, str(FDSDATA), str(input_file), '--yes'], cwd=work_dir, env=env,
+                            capture_output=True, text=True, timeout=900)
     assert result.returncode == 0 and 'Traceback' not in result.stderr, result.stdout[-2000:] + result.stderr
     project_dirs = [p for p in work_dir.iterdir() if p.is_dir()]
     assert len(project_dirs) == 1, project_dirs
