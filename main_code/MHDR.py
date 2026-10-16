@@ -63,6 +63,9 @@ def DEFINE_SEEDS(SEEDS):
     print(print_info)
     SET_VALUE('SEEDS_NUMBER',seeds)
     SET_VALUE('SEEDS',random_seeds_list)
+    # seeds already handed out or set by the user, and the source of replacements for repeated seeds (see MRND.NEXT_RANDOM_SEED).
+    SET_VALUE('USED_SEEDS', set())
+    SET_VALUE('REPLACEMENT_SEEDS', np.random.RandomState([int(seeds), 1]))
     return
 
 

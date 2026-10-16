@@ -41,7 +41,15 @@ def execute_script(script):
     
     # analyze the script
     valid_line_grouped_list, valid_lines=PS.break_script(script)
-    
+
+    # reserve user-defined seeds before any seed is handed out
+    for line in valid_lines:
+        function_name, args = PS.parse_script_lines(line)
+        if function_name == 'MRND':
+            for arg_name in ('RANDOM_SEEDS', 'SHUFFLE_RANDOM_SEEDS'):
+                if args.get(arg_name) is not None:
+                    MRND.RESERVE_RANDOM_SEEDS(args[arg_name] if isinstance(args[arg_name], list) else [args[arg_name]])
+
     # parameter pre-info inputs
     for line in valid_lines:
         function_name, args = PS.parse_script_lines(line) 
