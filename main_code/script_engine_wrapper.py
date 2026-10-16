@@ -396,7 +396,7 @@ def replace_HRC_value(case_num, line_content, valid_line_function_name, valid_li
                         T_value=time_samples[case_num]
                         F_value=hrr_samples[case_num]/hrrpua
                         for i in range(len(T_value)):
-                            line_content_replaced_RAMP_value='&RAMP ID='+"'"+str(parameters_list[pra_index].ID)+'_fireramp'+"'"+', T='+str(T_value[i])+', F='+str(F_value[i])+' /'
+                            line_content_replaced_RAMP_value='&RAMP ID='+"'"+str(parameters_list[pra_index].ID)+'_fireramp'+"'"+', T='+PS.format_value(T_value[i])+', F='+PS.format_value(F_value[i])+' /'
                             line_content_replaced.append(line_content_replaced_RAMP_value)
                     else:
                         line_content_replaced=[line_content_replaced_HRRPUA]

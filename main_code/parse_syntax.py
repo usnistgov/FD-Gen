@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 "Part 1: General syntax algorithm."
 # break the script
@@ -134,10 +135,20 @@ def parse_params(params_str):
     return params
 
 "Part 2: replace the potential sentence."
+# format one value as FDS text (numpy scalars -> plain numbers, float noise trimmed to 12 significant digits)
+def format_value(value):
+    if isinstance(value, np.floating):
+        value = float(str(value))
+    elif isinstance(value, np.generic):
+        value = value.item()
+    if isinstance(value, float):
+        value = float(f'{value:.12g}')
+    return repr(value)
+
 def replace_value(line_content, replaced_args, replaced_after_args, replaced_value):
-    # prepare the replaced syntax 
+    # prepare the replaced syntax
     line_content_replaced=line_content
-    replaced_value_str=str(replaced_value)[1:-1]+','+' '
+    replaced_value_str=', '.join(format_value(value) for value in replaced_value)+','+' '
     combined_str = replaced_args + '=' + replaced_value_str
     current_length = len(combined_str)
     
