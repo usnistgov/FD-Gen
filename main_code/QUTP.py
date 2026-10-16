@@ -1,6 +1,21 @@
 # import library
+import contextlib
 import os
+import numpy as np
 import pandas as pd
+import parse_syntax as PS
+
+# NumPy 2 prints scalars inside lists as np.float64(3.81); print reports the NumPy 1.x way (3.81).
+def legacy_numpy_print():
+    if int(np.__version__.split('.')[0]) >= 2:
+        return np.printoptions(legacy='1.25')
+    return contextlib.nullcontext()
+
+# spreadsheet cell: lists/arrays written in full as plain numbers, other values kept as they are.
+def format_cell(value):
+    if isinstance(value, (list, tuple, np.ndarray)):
+        return '[' + ', '.join(str(format_cell(v)) if isinstance(v, (list, tuple, np.ndarray)) else PS.format_value(v) for v in value) + ']'
+    return value
 
 "Part 1: print parameter brief information."
 def PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name):
@@ -333,6 +348,7 @@ def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_fil
             spreadsheet_data.update({name1:HRC_hrr_samples})
             
     # Create a DataFrame from the data
+    spreadsheet_data = {name: [format_cell(value) for value in column] for name, column in spreadsheet_data.items()}
     df = pd.DataFrame(spreadsheet_data)
 
     # Write the DataFrame to an Excel file

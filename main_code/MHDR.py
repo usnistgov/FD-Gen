@@ -104,8 +104,9 @@ def PARAMETER_FILE(PARAMETERS_OUTPUT, PARAMETER_SAMPLE_GENERATOR_OUTPUTS):
     os.makedirs(parameter_file_path)
     os.chdir(parameter_file_path)
     # write PARAMETER_FILE .csv file
-    file_parameter_brief=QUTP.PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name)
-    file_generator_info=QUTP.PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path, generator_info_name)
+    with QUTP.legacy_numpy_print():
+        file_parameter_brief=QUTP.PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name)
+        file_generator_info=QUTP.PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path, generator_info_name)
     file_parameter_spreadsheet=QUTP.PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, parameter_spreadsheet_name)
     
     print(f"*****PARAMETER_FILE file created successfully.")

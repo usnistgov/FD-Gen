@@ -86,8 +86,13 @@ def baseline_path(input_file):
 
 @pytest.mark.parametrize('input_file', INPUTS, ids=lambda p: p.stem)
 def test_outputs_match_baseline(input_file, tmp_path, request):
-    actual = collect_outputs(run_fdgen(input_file, tmp_path))
+    project_dir = run_fdgen(input_file, tmp_path)
+    actual = collect_outputs(project_dir)
     path = baseline_path(input_file)
+
+    reports = {f'PARAMETER_FILE_FOLDER/{p.name}': p.read_text() for p in (project_dir / 'PARAMETER_FILE_FOLDER').glob('*.txt')}
+    leaked = [name for name, text in {**actual, **reports}.items() if 'np.' in text]
+    assert not leaked, f'numpy reprs (np.xxx(...)) written to: {leaked[:5]}'
 
     if request.config.getoption('--update-baselines'):
         BASELINES.mkdir(exist_ok=True)
