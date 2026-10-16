@@ -1,4 +1,5 @@
 # import library
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -146,7 +147,7 @@ def PLOT_FIRE_SOURCE_LOCATIONS(FSL_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 # Show the plot
                 plt.tight_layout()
                 
-                plt.savefig(id+".jpg", format='jpg')
+                plt.savefig(os.path.join(GET_VALUE('OUTPUT_FOLDER_PATH'), id+".jpg"), format='jpg')
 
     
     return
@@ -182,7 +183,7 @@ def PLOT_HRR_CURVES(HRC_ID, PARAMETERS_OUTPUT, SKIP_CASE=1):
                 ax.set_ylabel('HRR', fontsize=18)
                 ax.set_yticks(ax.get_yticks()) 
                 ax.set_yticklabels([f"{int(tick)}" for tick in ax.get_yticks()], fontsize=15) 
-                plt.savefig(id+".jpg", format='jpg')
+                plt.savefig(os.path.join(GET_VALUE('OUTPUT_FOLDER_PATH'), id+".jpg"), format='jpg')
 
             
     return
@@ -230,7 +231,7 @@ def PLOT_GENERATOR_SAMPLINGS(PSD_ID, SAMPLE_GENERATOR_OUTPUTS, SKIP_CASE=1):
                     title_line2 = 'ID = {}'.format(plot_id)
                     ax.set_title(f'{title_line1}\n{title_line2}', fontsize=18)
                     
-                    plt.savefig(plot_id+".jpg", format='jpg')
+                    plt.savefig(os.path.join(GET_VALUE('OUTPUT_FOLDER_PATH'), plot_id+".jpg"), format='jpg')
 
         
     return

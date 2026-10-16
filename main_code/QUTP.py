@@ -21,9 +21,8 @@ def format_cell(value):
 "Part 1: print parameter brief information."
 def PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name):
     parameter_outputs=PARAMETERS_OUTPUT
-    os.chdir(parameter_file_path)
     
-    with open(parameter_brief_name, 'w') as file:
+    with open(os.path.join(parameter_file_path, parameter_brief_name), 'w') as file:
     
         file.write('=================================================\n')
         file.write('==========  Fire source location (FSL) ==========\n')
@@ -120,9 +119,8 @@ def PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter
 "Part 2: print generator information."
 def PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path, generator_info_name):
     parameter_sample_generator_outputs=PARAMETER_SAMPLE_GENERATOR_OUTPUTS
-    os.chdir(parameter_file_path)
     
-    with open(generator_info_name, 'w') as file:
+    with open(os.path.join(parameter_file_path, generator_info_name), 'w') as file:
         file.write('=================================================\n')
         file.write('==========  Fire source location (FSL) ==========\n')
         if parameter_sample_generator_outputs['FSL'] != []:
@@ -205,7 +203,6 @@ def PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path
 "Part 3: print parameter spreadsheet."
 def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, parameter_spreadsheet_name):
     parameter_outputs=PARAMETERS_OUTPUT
-    os.chdir(parameter_file_path)
     
     C_cases=list(range(number_of_case))
     spreadsheet_data = {'Cases': C_cases}
@@ -342,7 +339,7 @@ def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_fil
     df = pd.DataFrame(spreadsheet_data)
 
     # Write the DataFrame to an Excel file
-    output_file = parameter_spreadsheet_name
+    output_file = os.path.join(parameter_file_path, parameter_spreadsheet_name)
     df.to_excel(output_file, index=False)
     
     
