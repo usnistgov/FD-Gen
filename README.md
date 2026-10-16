@@ -117,6 +117,8 @@ To open a terminal and use the command to navigate to the location of the FD-Gen
     | `-h`, `--help` | show the usage and all options |
 
     For example: `python FDSdata.py example_commercial.fds --yes`
+
+    If a project folder with the same PROJECT_NAME already exists in the current directory, FD-Gen asks before deleting it (with `--yes` it is replaced without asking).
     
 
 4. sample the parameter value data.

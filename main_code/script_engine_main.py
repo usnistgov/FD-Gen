@@ -5,6 +5,15 @@ import script_engine_checking as SEC
 import script_engine_sampling as SES
 
 
+def project_name(script):
+    # PROJECT_NAME from the &MAIN line, or None if there is none
+    valid_line_grouped_list, valid_lines=PS.break_script(script)
+    for line in valid_lines:
+        function_name, args = PS.parse_script_lines(line)
+        if function_name == 'MAIN' and 'PROJECT_NAME' in args:
+            return str(args['PROJECT_NAME'])
+    return None
+
 def execute_MHDR_script(script):
     # namespace
     namespace_MHDR = {'MAIN': MHDR.MHDR_MAIN}

@@ -1,4 +1,5 @@
 import argparse
+import os
 import script_engine_main
 import sys
 
@@ -29,6 +30,9 @@ def FDSdata(path, assume_yes=False, sample_only=False):
     print('********** upgraded date 12/6/2024 ***********')
     print('**********************************************')
     print('\n')
+    project_name = script_engine_main.project_name(user_script)
+    if project_name is not None and os.path.exists(os.path.join(os.getcwd(), project_name)):
+        confirm(f"Project folder '{project_name}' already exists. Delete it and continue? (Y/N): ", assume_yes)
     print('========================================')
     script_engine_main.execute_MHDR_script(user_script)
     print('========================================\n')

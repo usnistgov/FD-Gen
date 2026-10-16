@@ -42,3 +42,34 @@ def test_help_lists_options(tmp_path):
     result = run(['--help'], tmp_path)
     assert result.returncode == 0
     assert '--yes' in result.stdout and '--sample-only' in result.stdout
+
+
+def make_existing_project(tmp_path):
+    marker = tmp_path / 'test_script_FSL' / 'CASE_FOLDER' / 'old_result.fds'
+    marker.parent.mkdir(parents=True)
+    marker.write_text('earlier results')
+    return marker
+
+
+def test_existing_project_kept_when_user_answers_no(tmp_path):
+    marker = make_existing_project(tmp_path)
+    result = run([str(SCRIPT)], tmp_path, stdin='n\n')
+    assert 'already exists' in result.stdout
+    assert 'Operation aborted.' in result.stdout
+    assert marker.read_text() == 'earlier results'
+
+
+def test_existing_project_replaced_when_user_answers_yes(tmp_path):
+    marker = make_existing_project(tmp_path)
+    result = run([str(SCRIPT)], tmp_path, stdin='y\ny\ny\n')
+    assert result.returncode == 0, result.stdout[-1500:] + result.stderr
+    assert not marker.exists()
+    assert len(list((tmp_path / 'test_script_FSL' / 'CASE_FOLDER').glob('*.fds'))) == 10
+
+
+def test_existing_project_replaced_with_yes_flag(tmp_path):
+    marker = make_existing_project(tmp_path)
+    result = run([str(SCRIPT), '--yes'], tmp_path)
+    assert result.returncode == 0, result.stdout[-1500:] + result.stderr
+    assert 'already exists' in result.stdout
+    assert not marker.exists()
