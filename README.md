@@ -1,10 +1,12 @@
-# Fire Data Generator (FD-Gen)  v1.0.0
+# Fire Data Generator (FD-Gen)  v1.1.0
 
-**Release Name**: FD-Gen v1.0.0
+**Release Name**: FD-Gen v1.1.0
 
-**Release Date**: [Mar 6, 2025]
+**Release Date**: [Oct 23, 2026]
 
-**Version**: 1.0.0
+**Version**: 1.1.0
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed since v1.0.0.
 
 ---
 

@@ -2,6 +2,7 @@ import argparse
 import os
 import script_engine_main
 import sys
+from version import VERSION, RELEASE_DATE
 
 # ask a Y/N question; with --yes the answer is Y without asking. 'N' or invalid input ends the program.
 def confirm(question, assume_yes):
@@ -26,8 +27,8 @@ def FDSdata(path, assume_yes=False, sample_only=False):
     "Step 1 basic information."
     print('\n')
     print('**********************************************')
-    print('* Fire Data Generator (FD-Gen) Version 1.0.0 *')
-    print('********** upgraded date 12/6/2024 ***********')
+    print(f'* Fire Data Generator (FD-Gen) Version {VERSION} *')
+    print(f' release date {RELEASE_DATE} '.center(46, '*'))
     print('**********************************************')
     print('\n')
     project_name = script_engine_main.project_name(user_script)
@@ -71,6 +72,7 @@ if __name__ == "__main__":
     parser.add_argument('script_file_path', help='FD-Gen input file (.fds)')
     parser.add_argument('-y', '--yes', action='store_true', help='answer Y to all prompts and run every step without asking')
     parser.add_argument('--sample-only', action='store_true', help='stop after the sampling step (no FDS case files or plots)')
+    parser.add_argument('--version', action='version', version=f'FD-Gen {VERSION} ({RELEASE_DATE})')
     args = parser.parse_args()
 
     FDSdata(args.script_file_path, assume_yes=args.yes, sample_only=args.sample_only)

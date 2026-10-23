@@ -44,6 +44,14 @@ def test_help_lists_options(tmp_path):
     assert '--yes' in result.stdout and '--sample-only' in result.stdout
 
 
+def test_version_option_and_banner(tmp_path):
+    from version import VERSION, RELEASE_DATE
+    result = run(['--version'], tmp_path)
+    assert result.returncode == 0 and result.stdout.strip() == f'FD-Gen {VERSION} ({RELEASE_DATE})'
+    result = run([str(SCRIPT), '--sample-only', '--yes'], tmp_path)
+    assert f'Version {VERSION}' in result.stdout and RELEASE_DATE in result.stdout
+
+
 def make_existing_project(tmp_path):
     marker = tmp_path / 'test_script_FSL' / 'CASE_FOLDER' / 'old_result.fds'
     marker.parent.mkdir(parents=True)
