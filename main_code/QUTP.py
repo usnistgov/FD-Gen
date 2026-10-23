@@ -1,13 +1,28 @@
 # import library
+import contextlib
+import csv
 import os
+import numpy as np
 import pandas as pd
+import parse_syntax as PS
+
+# NumPy 2 prints scalars inside lists as np.float64(3.81); print reports the NumPy 1.x way (3.81).
+def legacy_numpy_print():
+    if int(np.__version__.split('.')[0]) >= 2:
+        return np.printoptions(legacy='1.25')
+    return contextlib.nullcontext()
+
+# spreadsheet cell: lists/arrays written in full as plain numbers, other values kept as they are.
+def format_cell(value):
+    if isinstance(value, (list, tuple, np.ndarray)):
+        return '[' + ', '.join(str(format_cell(v)) if isinstance(v, (list, tuple, np.ndarray)) else PS.format_value(v) for v in value) + ']'
+    return value
 
 "Part 1: print parameter brief information."
 def PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name):
     parameter_outputs=PARAMETERS_OUTPUT
-    os.chdir(parameter_file_path)
     
-    with open(parameter_brief_name, 'w') as file:
+    with open(os.path.join(parameter_file_path, parameter_brief_name), 'w') as file:
     
         file.write('=================================================\n')
         file.write('==========  Fire source location (FSL) ==========\n')
@@ -104,9 +119,8 @@ def PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter
 "Part 2: print generator information."
 def PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path, generator_info_name):
     parameter_sample_generator_outputs=PARAMETER_SAMPLE_GENERATOR_OUTPUTS
-    os.chdir(parameter_file_path)
     
-    with open(generator_info_name, 'w') as file:
+    with open(os.path.join(parameter_file_path, generator_info_name), 'w') as file:
         file.write('=================================================\n')
         file.write('==========  Fire source location (FSL) ==========\n')
         if parameter_sample_generator_outputs['FSL'] != []:
@@ -189,7 +203,6 @@ def PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path
 "Part 3: print parameter spreadsheet."
 def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, parameter_spreadsheet_name):
     parameter_outputs=PARAMETERS_OUTPUT
-    os.chdir(parameter_file_path)
     
     C_cases=list(range(number_of_case))
     spreadsheet_data = {'Cases': C_cases}
@@ -319,24 +332,14 @@ def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_fil
             spreadsheet_data.update({name1:MHR_peak})
             spreadsheet_data.update({name2:MHR_decay})
     
-    # HRC spreadsheet
-    if parameter_outputs['HRC'] != []:
-        for number, data_dic in enumerate(parameter_outputs['HRC']):
-            name0='<HRC> ID - ' + data_dic.ID + ' .Fire time duration'
-            HRC_fire_time_duration=[]
-            name1='<HRC> ID - ' + data_dic.ID + ' .HRR samples'
-            HRC_hrr_samples=[]
-            for case_num in range(number_of_case):
-                HRC_fire_time_duration.append(data_dic.TIME_SLICE_SAMPLES[case_num])
-                HRC_hrr_samples.append(data_dic.HRR_SAMPLES[case_num])
-            spreadsheet_data.update({name0:HRC_fire_time_duration})
-            spreadsheet_data.update({name1:HRC_hrr_samples})
-            
+    # HRC curves are written to hrr_curves.csv (see PRINT_HRR_CURVES_CSV), too long for spreadsheet cells.
+
     # Create a DataFrame from the data
+    spreadsheet_data = {name: [format_cell(value) for value in column] for name, column in spreadsheet_data.items()}
     df = pd.DataFrame(spreadsheet_data)
 
     # Write the DataFrame to an Excel file
-    output_file = parameter_spreadsheet_name
+    output_file = os.path.join(parameter_file_path, parameter_spreadsheet_name)
     df.to_excel(output_file, index=False)
     
     
@@ -345,3 +348,20 @@ def PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_fil
     
     
     
+
+"Part 4: print HRR curves."
+# one row per time step: HRC_ID, Case, Time (s), HRR (kW); no file when no HRR curve is generated.
+def PRINT_HRR_CURVES_CSV(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, hrr_curves_name):
+    parameter_outputs=PARAMETERS_OUTPUT
+    if parameter_outputs['HRC'] == []:
+        return
+    
+    with open(os.path.join(parameter_file_path, hrr_curves_name), 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['HRC_ID', 'Case', 'Time (s)', 'HRR (kW)'])
+        for data_dic in parameter_outputs['HRC']:
+            for case_num in range(number_of_case):
+                for time, hrr in zip(data_dic.TIME_SLICE_SAMPLES[case_num], data_dic.HRR_SAMPLES[case_num]):
+                    writer.writerow([data_dic.ID, case_num, PS.format_value(time), PS.format_value(hrr)])
+    
+    return

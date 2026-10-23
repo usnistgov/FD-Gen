@@ -9,6 +9,26 @@ from global_parm import *
 
 
 " This is the module for random data sampling and refining."
+# next seed for a generator: the v1.0.0 seed list in order, but a seed is never handed out twice.
+# A repeated (or user-reserved) seed is replaced from a separate stream of seeds >= 100, outside the
+# v1.0.0 range 0-99, so later generators keep their v1.0.0 seeds; the list no longer runs out after 200.
+def NEXT_RANDOM_SEED():
+    seeds_list=GET_VALUE('SEEDS')
+    used_seeds=GET_VALUE('USED_SEEDS')
+    seed=None
+    if len(seeds_list) > 0:
+        seed=int(seeds_list[0])
+        SET_VALUE('SEEDS', seeds_list[1:])
+    while seed is None or seed in used_seeds:
+        seed=int(GET_VALUE('REPLACEMENT_SEEDS').randint(100, 2**31-1))
+    used_seeds.add(seed)
+    return seed
+
+# seeds set by the user (RANDOM_SEEDS / SHUFFLE_RANDOM_SEEDS) are never handed out to other generators.
+def RESERVE_RANDOM_SEEDS(seeds):
+    GET_VALUE('USED_SEEDS').update(int(seed) for seed in seeds)
+
+
 # define the class of generator
 class SAMPLE_GENERATOR_DICT:
     def __init__(self, SAMPLE_GENERATOR_INFO=None):
@@ -172,17 +192,13 @@ def GENERATING_SAMPLES(SAMPLE_GENERATOR_INFO):
             
             # create sampling random seeds
             if random_seeds is None:
-                random_seeds_list=GET_VALUE('SEEDS')
-                random_seeds=random_seeds_list[0]
+                random_seeds=NEXT_RANDOM_SEED()
                 sample_generator.RANDOM_SEEDS[GENERATOR_ID] = random_seeds
-                SET_VALUE('SEEDS', random_seeds_list[1:])
-                
+
             # create shuffle random seeds
             if shuffle_states is True:
                 if shuffle_random_seeds is None:
-                    random_seeds_list=GET_VALUE('SEEDS')
-                    shuffle_random_seeds = random_seeds_list[0]
-                    SET_VALUE('SEEDS',random_seeds_list[1:])
+                    shuffle_random_seeds = NEXT_RANDOM_SEED()
             sample_generator.SHUFFLE_RANDOM_SEEDS[GENERATOR_ID] = shuffle_random_seeds
             
             # refine the sample with value type

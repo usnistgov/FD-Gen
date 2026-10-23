@@ -30,7 +30,7 @@ def DEFINE_PROJECT_NAME(PROJECT_NAME):
 # define path name
 def DEFINE_PATH():
     PATH = os.getcwd()
-    path=PATH + "\\" + GET_VALUE('PROJECT_NAME')
+    path=os.path.join(PATH, GET_VALUE('PROJECT_NAME'))
     formatted_name = 'CURRENT PATH'[:21].ljust(21)+'==>'
     print_info = formatted_name +' '+path
     print(print_info)
@@ -63,22 +63,24 @@ def DEFINE_SEEDS(SEEDS):
     print(print_info)
     SET_VALUE('SEEDS_NUMBER',seeds)
     SET_VALUE('SEEDS',random_seeds_list)
+    # seeds already handed out or set by the user, and the source of replacements for repeated seeds (see MRND.NEXT_RANDOM_SEED).
+    SET_VALUE('USED_SEEDS', set())
+    SET_VALUE('REPLACEMENT_SEEDS', np.random.RandomState([int(seeds), 1]))
     return
 
 
 # The seed number is saved to original path with a .txt file outputted.
 def SAVE_SEEDS():
     
-    save_seed_path=GET_VALUE('PATH')+"\\" + "SEEDS_FOLDER"
+    save_seed_path=os.path.join(GET_VALUE('PATH'), 'SEEDS_FOLDER')
     # Check if the directory exists
     if os.path.exists(save_seed_path):
      # If it exists, remove it
         shutil.rmtree(save_seed_path)
     # Create the new directory
     os.makedirs(save_seed_path)
-    os.chdir(save_seed_path)
     # write SAVE_SEEDS .text file
-    with open(save_seed_path+"\\"+'SAVE_SEEDS_file.txt', 'w') as save_seed_file:
+    with open(os.path.join(save_seed_path, 'SAVE_SEEDS_file.txt'), 'w') as save_seed_file:
         save_seed_file.write(f"The seed number is: {GET_VALUE('SEEDS_NUMBER')}\n")
         save_seed_file.write(f"The number of cases is: {GET_VALUE('NUMBER_OF_CASES')}\n")
         
@@ -92,7 +94,7 @@ def SAVE_SEEDS():
 def PARAMETER_FILE(PARAMETERS_OUTPUT, PARAMETER_SAMPLE_GENERATOR_OUTPUTS):
     
     number_of_case=GET_VALUE('NUMBER_OF_CASES')
-    parameter_file_path=GET_VALUE('PATH')+"\\" + "PARAMETER_FILE_FOLDER"
+    parameter_file_path=os.path.join(GET_VALUE('PATH'), 'PARAMETER_FILE_FOLDER')
     parameter_brief_name='param_brief.txt'
     generator_info_name='generator_info.txt'
     parameter_spreadsheet_name='parameter_outputs.xlsx'
@@ -102,11 +104,12 @@ def PARAMETER_FILE(PARAMETERS_OUTPUT, PARAMETER_SAMPLE_GENERATOR_OUTPUTS):
         shutil.rmtree(parameter_file_path)
     # Create the new directory
     os.makedirs(parameter_file_path)
-    os.chdir(parameter_file_path)
     # write PARAMETER_FILE .csv file
-    file_parameter_brief=QUTP.PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name)
-    file_generator_info=QUTP.PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path, generator_info_name)
+    with QUTP.legacy_numpy_print():
+        file_parameter_brief=QUTP.PRINT_PARAMETER_BRIEF_INFO(PARAMETERS_OUTPUT, parameter_file_path, parameter_brief_name)
+        file_generator_info=QUTP.PRINT_GENERATOR_INFO(PARAMETER_SAMPLE_GENERATOR_OUTPUTS, parameter_file_path, generator_info_name)
     file_parameter_spreadsheet=QUTP.PRINT_PARAMETER_SPREADSHEET(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, parameter_spreadsheet_name)
+    QUTP.PRINT_HRR_CURVES_CSV(number_of_case, PARAMETERS_OUTPUT, parameter_file_path, 'hrr_curves.csv')
     
     print(f"*****PARAMETER_FILE file created successfully.")
     
@@ -116,16 +119,15 @@ def PARAMETER_FILE(PARAMETERS_OUTPUT, PARAMETER_SAMPLE_GENERATOR_OUTPUTS):
 # output the set of FDS inputs file and this folder creates the path where the FDS input files to be run.
 def CASE_FOLDER(USER_SCRIPT, parameter_outputs):
     filename=GET_VALUE('PROJECT_NAME')
-    work_folder_path=GET_VALUE('PATH')+"\\" + "CASE_FOLDER"
+    work_folder_path=os.path.join(GET_VALUE('PATH'), 'CASE_FOLDER')
     # Check if the directory exists
     if os.path.exists(work_folder_path):
      # If it exists, remove it
         shutil.rmtree(work_folder_path)
     # Create the new directory
     os.makedirs(work_folder_path)
-    os.chdir(work_folder_path)
     # write WORK_FOLDER .fds file
-    file=SEW.replace_FDS_base_script(USER_SCRIPT, filename=filename, parameter_outputs=parameter_outputs)
+    file=SEW.replace_FDS_base_script(USER_SCRIPT, filename=filename, parameter_outputs=parameter_outputs, output_folder=work_folder_path)
     
     print(f"*****CASE_FOLDER file created successfully.")
     
@@ -134,13 +136,13 @@ def CASE_FOLDER(USER_SCRIPT, parameter_outputs):
 "Part 3: output file output."
 def OUTPUT_FOLDER():
     
-    output_folder_path=GET_VALUE('PATH')+"\\" + "OUTPUT_FOLDER"
+    output_folder_path=os.path.join(GET_VALUE('PATH'), 'OUTPUT_FOLDER')
     # Check if the directory exists
     if os.path.exists(output_folder_path):
      # If it exists, remove it
         shutil.rmtree(output_folder_path)
     # Create the new directory
     os.makedirs(output_folder_path)
-    os.chdir(output_folder_path)
+    SET_VALUE('OUTPUT_FOLDER_PATH', output_folder_path)
 
     return 

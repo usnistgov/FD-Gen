@@ -1,8 +1,9 @@
+import os
 from global_parm import *
 import parse_syntax as PS
 
 "Part 2: to replace the value."
-def replace_FDS_base_script(script, filename, parameter_outputs):
+def replace_FDS_base_script(script, filename, parameter_outputs, output_folder):
     
     def write_lines(line_content, line_content_replaced):
         if line_content_replaced==[]:
@@ -24,7 +25,7 @@ def replace_FDS_base_script(script, filename, parameter_outputs):
         # create file name
         fds_input_file_name=str(filename+'_'+'{:05}'.format(case_num)+'.fds')
         # go through FDS data generator script
-        with open(fds_input_file_name, 'w') as file:
+        with open(os.path.join(output_folder, fds_input_file_name), 'w') as file:
             for line_content, line_num in zip(script, range(len(script))):
                 line_content=line_content.decode('UTF-8')
                 line_content_replaced=[]
@@ -396,7 +397,7 @@ def replace_HRC_value(case_num, line_content, valid_line_function_name, valid_li
                         T_value=time_samples[case_num]
                         F_value=hrr_samples[case_num]/hrrpua
                         for i in range(len(T_value)):
-                            line_content_replaced_RAMP_value='&RAMP ID='+"'"+str(parameters_list[pra_index].ID)+'_fireramp'+"'"+', T='+str(T_value[i])+', F='+str(F_value[i])+' /'
+                            line_content_replaced_RAMP_value='&RAMP ID='+"'"+str(parameters_list[pra_index].ID)+'_fireramp'+"'"+', T='+PS.format_value(T_value[i])+', F='+PS.format_value(F_value[i])+' /'
                             line_content_replaced.append(line_content_replaced_RAMP_value)
                     else:
                         line_content_replaced=[line_content_replaced_HRRPUA]

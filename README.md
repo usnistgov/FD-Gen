@@ -1,10 +1,12 @@
-# Fire Data Generator (FD-Gen)  v1.0.0
+# Fire Data Generator (FD-Gen)  v1.1.0
 
-**Release Name**: FD-Gen v1.0.0
+**Release Name**: FD-Gen v1.1.0
 
-**Release Date**: [Mar 6, 2025]
+**Release Date**: [Oct 23, 2026]
 
-**Version**: 1.0.0
+**Version**: 1.1.0
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed since v1.0.0.
 
 ---
 
@@ -16,7 +18,7 @@ The tool is developed using the Python programming language. It generates random
 
 The package consists of the following files:
 
-[**executable FD-Gen**](FD-Gen.exe)
+[**executable FD-Gen**](https://github.com/usnistgov/FD-Gen/releases) (download **FD-Gen.exe** from the latest release)
 
 [**Python souce code**](main_code) 
 
@@ -62,19 +64,22 @@ The workflow of FD-Gen is shown below. It consists of 4 main steps.
 
 
 ## installation instructions
-This project provides a GitHub repository for those interested in obtaining and testing FD-Gen. The current location of the repository is https://github.com/usnistgov/FD-Gen. The repository contains both the [**source code**](main_code) and the executable file [**FD-Gen.exe**](FD-Gen.exe). The FD-Gen executable has been tested and confirmed to work effectively on Windows 10 and 11-based personal computers with FDS version 6.9.1. For users utilizing the Python source code, the environment requirements for the dependencies are listed below. Ensure that these dependencies are installed in your Python environment before running FD-Gen:
+This project provides a GitHub repository for those interested in obtaining and testing FD-Gen. The current location of the repository is https://github.com/usnistgov/FD-Gen. The repository contains the [**source code**](main_code); the executable file **FD-Gen.exe** is attached to each release on the [**Releases page**](https://github.com/usnistgov/FD-Gen/releases). The FD-Gen executable has been tested and confirmed to work effectively on Windows 10 and 11-based personal computers with FDS version 6.9.1. For users utilizing the Python source code, the environment requirements for the dependencies are listed below. Ensure that these dependencies are installed in your Python environment before running FD-Gen:
 
-Python	    3.11 or higher
+| Package    | Version              |
+|------------|----------------------|
+| Python     | 3.11 or higher       |
+| Numpy      | 1.26.4 or higher, <3 |
+| Pandas     | 2.2.3 or higher, <3  |
+| Scipy      | 1.14.1 or higher, <2 |
+| Matplotlib | 3.9.2 or higher, <4  |
+| Openpyxl   | 3.1.5 or higher, <4  |
 
-Numpy	      1.26.4
+NumPy 2.x is supported. The dependencies can be installed with:
 
-Pandas	    2.2.3
-
-Scipy	      1.14.1
-
-Matplotlib	3.9.2
-
-Openpyxl	  3.1.5
+```bash
+pip install -r requirements.txt
+```
 
 
 ## Usage approach 
@@ -104,6 +109,18 @@ To open a terminal and use the command to navigate to the location of the FD-Gen
       or
 
         python FDSdata.py <FD-Gen project name>.fds
+
+    Optional flags (v1.1.0 and later):
+
+    | Flag | Effect |
+    |------|--------|
+    | `-y`, `--yes` | answer Y to all prompts, so the program runs every step without asking (useful for batch or cluster runs) |
+    | `--sample-only` | stop after the sampling step, so you can review the sampled values before any FDS case files are written |
+    | `-h`, `--help` | show the usage and all options |
+
+    For example: `python FDSdata.py example_commercial.fds --yes`
+
+    If a project folder with the same PROJECT_NAME already exists in the current directory, FD-Gen asks before deleting it (with `--yes` it is replaced without asking).
     
 
 4. sample the parameter value data.
@@ -125,7 +142,7 @@ In addition to the spreadsheet containing the sampled parameter value informatio
 ### Start
 [**commercial building fire case**](example/example_commercial.fds)
 
-1. download **FD-Gen.exe** and the example input file **example_commercial.fds**
+1. download **FD-Gen.exe** from the [Releases page](https://github.com/usnistgov/FD-Gen/releases) and the example input file **example_commercial.fds**
 
 2. open a terminal
 
@@ -156,7 +173,7 @@ The OUTPUT_FOLDER contains visualizations of the sampled data, including plots o
 **Figure 3.** example of OUTPUT_FOLDER.
 
 **PARAMETER_FILE_FOLDER**
-The PARAMETER_FILE_FOLDER contains a spreadsheet with the sampled parameter values for each case, along with a text file providing a summary of the parameter values. 
+The PARAMETER_FILE_FOLDER contains a spreadsheet with the sampled parameter values for each case, along with a text file providing a summary of the parameter values. When HRR curves are generated, the full curve of every case is saved in **hrr_curves.csv**, one row per time step (columns: HRC_ID, Case, Time (s), HRR (kW)). 
 
 ![Figure 4. example of PARAMETER_FILE_FOLDER.](images/Picture4.png)
 

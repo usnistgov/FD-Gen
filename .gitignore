@@ -1,0 +1,21 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# test runs
+.pytest_cache/
+
+# editor and OS settings
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Python environments
+.venv/
+venv/
+
+# built executable (published on the GitHub Releases page, not in the repo)
+/FD-Gen.exe
+build/
+dist/

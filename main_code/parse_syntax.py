@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 "Part 1: General syntax algorithm."
 # break the script
@@ -41,9 +42,7 @@ def parse_script_lines(line):
     
     if match1:
         function_name = match1.group(1)
-        params_str = match1.group(2)
-        if '/' in params_str:
-            params_str=params_str.split('/')[0]
+        params_str = strip_terminator(match1.group(2))
         params = parse_params(params_str)
         # modify
         if 'ID' in params: 
@@ -56,9 +55,7 @@ def parse_script_lines(line):
     
     elif match2:
         function_name = '    '
-        params_str = line[5:]
-        if '/' in params_str:
-            params_str=params_str.split('/')[0]
+        params_str = strip_terminator(line[5:])
         params = parse_params(params_str)
         # modify
         if 'ID' in params: 
@@ -73,27 +70,44 @@ def parse_script_lines(line):
         raise ValueError("Invalid script line format")
 
 
+# text inside '...' blanked out with the same length, so commas, '/', '=' and argument names
+# in quoted text are not read as syntax; positions in the masked text match the original.
+def mask_quotes(text):
+    return re.sub(r"'[^']*'", lambda match: "'" + '\x00' * (len(match.group(0)) - 2) + "'", text)
+
+# drop the closing '/' of a namelist line and what follows it ('/' inside quotes is kept)
+def strip_terminator(params_str):
+    index = mask_quotes(params_str).find('/')
+    return params_str if index == -1 else params_str[:index]
+
+# position of argument ARG_NAME= in a line, ignoring quoted text and longer names ending in ARG_NAME
+def find_arg(line, arg_name):
+    masked = mask_quotes(line)
+    match = re.search(r'(?<![\w(])' + re.escape(arg_name) + r'\s*=', masked)
+    return match.start() if match else masked.find(arg_name)
+
 def parse_params(params_str):
     # Parse parameter pair strings -- key-value pairs
     params = {}
-    params_str=re.sub(r'\s*=\s*', '=', params_str)
-    parts = re.findall(r'\b[\w():,]+=.*?(?=\s*\b[\w():,]+=|\s*$)', params_str)
-    for part in parts:
-        part = part.split('=')
-        key = part[0].strip()
-        space_indices=[]
-        quota_indices=[]
-        space_indices = [index for index, char in enumerate(part[1]) if char == ' ']
-        quota_indices = [index for index, char in enumerate(part[1]) if char == "'"]
-        groups_quota_indices = [quota_indices[i:i + 2] for i in range(0, len(quota_indices), 2)]   
-        for s_index in space_indices:
-            result = any(pair[0]<=s_index<= pair[1] for pair in groups_quota_indices)
-            if result is True:
-                part[1][s_index]
-            else:
-                part[1][s_index].replace(' ', '')
-        string_value=part[1]
-        split_string_value = string_value.split(',')
+    # remove spaces around '=' outside quotes
+    pieces, last = [], 0
+    for match in re.finditer(r'\s*=\s*', mask_quotes(params_str)):
+        pieces += [params_str[last:match.start()], '=']
+        last = match.end()
+    params_str = ''.join(pieces) + params_str[last:]
+    masked = mask_quotes(params_str)
+    for part_match in re.finditer(r'\b[\w():,]+=.*?(?=\s*\b[\w():,]+=|\s*$)', masked):
+        start, end = part_match.span()
+        equal_index = masked.index('=', start)
+        key = params_str[start:equal_index].strip()
+        string_value = params_str[equal_index+1:end]
+        # split values on commas outside quotes
+        split_string_value, last = [], 0
+        for index, char in enumerate(masked[equal_index+1:end]):
+            if char == ',':
+                split_string_value.append(string_value[last:index])
+                last = index + 1
+        split_string_value.append(string_value[last:])
         # Convert to a list of appropriate types
         mapping = {
             '.FALSE.':'.FALSE.',
@@ -134,21 +148,31 @@ def parse_params(params_str):
     return params
 
 "Part 2: replace the potential sentence."
+# format one value as FDS text (numpy scalars -> plain numbers, float noise trimmed to 12 significant digits)
+def format_value(value):
+    if isinstance(value, np.floating):
+        value = float(str(value))
+    elif isinstance(value, np.generic):
+        value = value.item()
+    if isinstance(value, float):
+        value = float(f'{value:.12g}')
+    return repr(value)
+
 def replace_value(line_content, replaced_args, replaced_after_args, replaced_value):
-    # prepare the replaced syntax 
+    # prepare the replaced syntax
     line_content_replaced=line_content
-    replaced_value_str=str(replaced_value)[1:-1]+','+' '
+    replaced_value_str=', '.join(format_value(value) for value in replaced_value)+','+' '
     combined_str = replaced_args + '=' + replaced_value_str
     current_length = len(combined_str)
     
-    index_start = line_content.find(replaced_args)
+    index_start = find_arg(line_content, replaced_args)
     if replaced_after_args is not None:
-        index_end = line_content.find(replaced_after_args)
+        index_end = find_arg(line_content, replaced_after_args)
         spaces_to_add=len(line_content_replaced[index_start:index_end])-current_length
         final_str = combined_str + ' ' * spaces_to_add
         line_content_replaced=line_content_replaced[:index_start]+final_str+line_content_replaced[index_end:]
     else:
-        index_end = line_content.find('/')
+        index_end = mask_quotes(line_content).find('/')
         if index_end != -1:
             spaces_to_add=len(line_content_replaced[index_start:index_end+1])-current_length
             final_str = combined_str + ' ' * spaces_to_add
