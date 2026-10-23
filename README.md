@@ -18,7 +18,7 @@ The tool is developed using the Python programming language. It generates random
 
 The package consists of the following files:
 
-[**executable FD-Gen**](https://github.com/usnistgov/FD-Gen/releases) (download **FD-Gen.exe** from the latest release)
+[**executable FD-Gen**](FD-Gen.exe)
 
 [**Python souce code**](main_code) 
 
@@ -64,7 +64,7 @@ The workflow of FD-Gen is shown below. It consists of 4 main steps.
 
 
 ## installation instructions
-This project provides a GitHub repository for those interested in obtaining and testing FD-Gen. The current location of the repository is https://github.com/usnistgov/FD-Gen. The repository contains the [**source code**](main_code); the executable file **FD-Gen.exe** is attached to each release on the [**Releases page**](https://github.com/usnistgov/FD-Gen/releases). The FD-Gen executable has been tested and confirmed to work effectively on Windows 10 and 11-based personal computers with FDS version 6.9.1. For users utilizing the Python source code, the environment requirements for the dependencies are listed below. Ensure that these dependencies are installed in your Python environment before running FD-Gen:
+This project provides a GitHub repository for those interested in obtaining and testing FD-Gen. The current location of the repository is https://github.com/usnistgov/FD-Gen. The repository contains both the [**source code**](main_code) and the executable file [**FD-Gen.exe**](FD-Gen.exe). The FD-Gen executable has been tested and confirmed to work effectively on Windows 10 and 11-based personal computers with FDS version 6.9.1. For users utilizing the Python source code, the environment requirements for the dependencies are listed below. Ensure that these dependencies are installed in your Python environment before running FD-Gen:
 
 | Package    | Version              |
 |------------|----------------------|
@@ -142,7 +142,7 @@ In addition to the spreadsheet containing the sampled parameter value informatio
 ### Start
 [**commercial building fire case**](example/example_commercial.fds)
 
-1. download **FD-Gen.exe** from the [Releases page](https://github.com/usnistgov/FD-Gen/releases) and the example input file **example_commercial.fds**
+1. download **FD-Gen.exe** and the example input file **example_commercial.fds**
 
 2. open a terminal
 

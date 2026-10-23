@@ -9,7 +9,6 @@ All notable changes to FD-Gen are listed here.
 - **HRR curves moved out of the parameter spreadsheet.** The two `<HRC>` columns (time and HRR samples) are no longer in `parameter_outputs.xlsx`. The full curves are now written to `PARAMETER_FILE_FOLDER/hrr_curves.csv`, one row per time step (`HRC_ID, Case, Time (s), HRR (kW)`). Scripts that read HRR curves from the spreadsheet need to read the CSV instead.
 - **Repeated random seeds are replaced.** In v1.0.0 two sampler lines (`&MRND`) could receive the same random seed. Now a seed that was already used is replaced, so those sampler lines get different values than in v1.0.0. Sampler lines that never got a repeated seed keep exactly the same values. Of the bundled examples, `example_commercial`, `example_Single_Story_Gas_1` and `example_CSTB_Tunnel_Test_2` are affected. To reproduce a v1.0.0 dataset exactly, use v1.0.0.
 - **FD-Gen asks before deleting an existing project folder.** Re-running a project used to delete its previous results without warning. Answer `Y` to replace them, or use `--yes`.
-- **`FD-Gen.exe` is published on the [Releases page](https://github.com/usnistgov/FD-Gen/releases)** instead of in the repository.
 
 ### Fixed
 

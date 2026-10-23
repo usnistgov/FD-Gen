@@ -15,7 +15,6 @@ Thumbs.db
 .venv/
 venv/
 
-# built executable (published on the GitHub Releases page, not in the repo)
-/FD-Gen.exe
+# PyInstaller build output (the released FD-Gen.exe is committed in the repository root)
 build/
 dist/
